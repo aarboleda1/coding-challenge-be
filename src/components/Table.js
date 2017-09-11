@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Footer from './Footer';
 import PropTypes from 'prop-types';
 import Row from './Row';
 
@@ -7,13 +8,15 @@ export default class Table extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			currentPage: 0,
+			currentPage: 1,
 			search: '',
 			filters: {},
 			allItems: [],
-			items: [],
+			currentItems: [],
 			itemsPerPage: 10,
 			sortBy: '',
+			numButtons: 0,
+			action: '',
 		}
 	}
 
@@ -25,13 +28,25 @@ export default class Table extends Component {
 			.then((data) => {
 				const currentDisplay  = data.slice(0, 15);
 				this.setState({
-					items: [...currentDisplay],
-					allItems: [...data]
+					currentItems: [...currentDisplay],
+					allItems: [...data],
+					numButtons: (data.length / this.state.itemsPerPage)
 				})
 			})
 	}
-	renderRows = (items) => {
-		const rows = items || this.state.items.slice(0,15);
+	renderRows = (items) => { //items are used for filtered listst
+		const {currentPage, itemsPerPage, allItems} = this.state;
+		let start = (currentPage - 1) * itemsPerPage;
+		let end = start + itemsPerPage;
+		// let rows = this.state.items || allItems.slice(start, end);
+		let rows;
+		if (this.state.action === 'sort') {
+			rows = this.state.currentItems
+		}	else if (this.state.action === 'paginate') {
+			rows = allItems.slice(start, end);
+		} else {
+			rows = allItems.slice(start, end);
+		}
 		return rows.map((item, idx) => {
 			return (
 				<Row
@@ -43,8 +58,8 @@ export default class Table extends Component {
 	}
 
 	renderTableHeader = () => {
-		if (this.state.items[0]) { 
-			const items = this.state.items[0];
+		if (this.state.currentItems[0]) { 
+			const items = this.state.currentItems[0];
 			const headers = Object.keys(items);
 			return headers.map((header, idx) => {
 				return (
@@ -61,26 +76,40 @@ export default class Table extends Component {
 	}
 	sortBy = (e) => {
 		let sortByType = e.target.dataset.celltype
-		let items = this.state.items.sort((a, b) => {
+		let items = this.state.currentItems.sort((a, b) => {
 			if (a[sortByType] > b[sortByType]) 	return 1;
 			
 			if (a[sortByType] < b[sortByType]) return -1;
-			
+
 			return 0;
 		})
 		this.setState({
-			items: [...items],
+			currentItems: [...items],
+			action: 'sort',
 		})
 	}
-
+	handlePaginate = (e) => {
+		let page = parseInt(e.target.outerText);
+		this.setState({
+			currentPage: page,
+			action: 'paginate',
+		})
+	}
+	handlePerPageSelect = (e) => {
+		let page = parseInt(e.target.value)
+		const newItems = this.state.currentItems.slice(0, page); 
+		this.setState({
+			itemsPerPage: page,
+			currentItems: newItems,
+		})
+	}
 
 	render() {
 		return (
 			<div className="table-wrapper">
-
 				<table className="table">
 					<tbody>
-						<tr>
+						<tr className="table-header">
 							<th>
 								<input 
 									type="checkbox" 
@@ -91,6 +120,12 @@ export default class Table extends Component {
 						{this.renderRows()}
 					</tbody>
 				</table>
+				<Footer
+					handlePerPageSelect={this.handlePerPageSelect}
+					currentPage={this.state.currentPage}
+					numButtons={this.state.numButtons}
+					handlePaginate={this.handlePaginate}
+				/>
 			</div>
 		)
 	}

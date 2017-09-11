@@ -1,3 +1,13 @@
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+    box-sizing: inherit;
+}
+
 html,
 body,
 #root {
@@ -25,4 +35,16 @@ th {
 .table-wrapper {
     max-width: 80%;
     margin: auto;
+}
+
+.paginate-list>li {
+    display: inline;
+    padding: 8px;
+}
+
+.footer {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
 }
