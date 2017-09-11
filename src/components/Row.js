@@ -20,6 +20,7 @@ export default class Row extends Component {
 					key={index}
 					val={this.props.item[itemName]}
 					cellType={itemName}
+					filters={this.props.filters}
 				/>
 			)
 		}) 

@@ -57,3 +57,11 @@ th {
 .header-wrapper {
     text-align: center;
 }
+
+.filters>li {
+    list-style-type: none;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
