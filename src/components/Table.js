@@ -20,6 +20,7 @@ export default class Table extends Component {
 			sortBy: '',
 			numButtons: 0,
 			action: '', 
+			selectedItems: {},
 		}
 	}
 	
@@ -43,8 +44,8 @@ export default class Table extends Component {
 		let start = (currentPage - 1) * itemsPerPage;
 		let end = start + itemsPerPage;
 		let rows;
-		console.log('yo')
-		if (action === 'sort' || action === 'paginate') {
+		console.log(action)
+		if (action === 'sort' || action === 'paginate' || action === 'selectBy') {
 			rows = currentItems;
 		} else if (action === 'search') {
 			rows = this.filterAllItems();
@@ -58,14 +59,16 @@ export default class Table extends Component {
 					item={item}
 					key={idx}
 					filters={this.state.filters}
+					handleRowSelect={this.handleRowSelect}
+					selectedItems={this.state.selectedItems}
 				/>
 			) 
 		})
 	}
 
 	renderTableHeader = () => {
-		if (this.state.currentItems[0]) { 
-			const items = this.state.currentItems[0];
+		if (this.state.allItems[0]) { 
+			const items = this.state.allItems[0];
 			let headers = Object.keys(items);
 			const filters = this.state.filters;			
 			return headers.map((header, idx) => {
@@ -131,11 +134,19 @@ export default class Table extends Component {
 		})
 	}
 	handlePerPageSelect = (e) => {
-		let page = parseInt(e.target.value)
-		const newItems = this.state.currentItems.slice(0, page); 
+		let numItemsToDisplay = parseInt(e.target.value)
+		let allItems = this.state.allItems;
+		
+		let floor = (this.state.currentPage - 1) * numItemsToDisplay;
+		let ceil = floor + numItemsToDisplay;
+
+		let start = this.state.currentPage
+		const newItems = this.state.currentItems.slice(floor, ceil); 
+
 		this.setState({
-			itemsPerPage: page,
+			itemsPerPage: numItemsToDisplay,
 			currentItems: newItems,
+			action: 'pageSelect',
 		})
 	}
 	handleSearch = (e) => {
@@ -154,6 +165,16 @@ export default class Table extends Component {
 		}
 		this.setState({
 			filters: newFilters
+		})
+	}
+	handleRowSelect = (e, item) => {
+		console.log(item)
+		let val = this.state.selectedItems[item.id] ? false : true; 
+		this.setState({
+			selectedItems: {
+				...this.state.selectedItems,
+				[item.id]: val
+			}
 		})
 	}
 

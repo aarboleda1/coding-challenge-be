@@ -5,6 +5,8 @@ import Cell from './Cell';
 export default class Row extends Component {
 	static PropTypes = {
 		item: PropTypes.object.isRequired,
+		handleRowSelect: PropTypes.func.isRequired,
+		selectedItems: PropTypes.object.isRequired,
 	}
 	constructor(props) {
 		super(props)
@@ -37,8 +39,8 @@ export default class Row extends Component {
 				<td>
 					<input 
 						type="checkbox" 
-						checked={this.state.isSelected}
-						onChange={this.handleInputChange}
+						checked={this.props.selectedItems[item.id]}
+						onChange={(e) => this.props.handleRowSelect(e, item)}
 					/>
 				</td>
 				{this.renderCells()}
