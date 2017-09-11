@@ -15,7 +15,7 @@ export default class Header extends Component {
 		return filterKeys.map((filter) => {
 			return (
 				<li key={filter}>
-					<span>{filter}</span>
+					<span className="filter-title">{filter}</span>
 					<input type="checkbox" data-filter={filter}checked={this.props.filters[filter]}/>
 				</li>
 			)
@@ -24,17 +24,17 @@ export default class Header extends Component {
 	render() {
 		return(
 			<div className="header-wrapper">
-				<div>React Datatable</div>	
+				{/*<div>React Datatable</div>	*/}
 					<div className="header">
-					<form>
-						<span>Search</span>
-						<input style={{marginLeft: '8px'}}type="text" onChange={this.props.handleSearch}/>
-					</form>
-					<form onChange={this.props.handleFilterSelect}>
-						<ul className="filters">
-							{this.renderFilters()}
-						</ul>
-					</form>
+						<div className="search">
+							<span>Search</span>
+							<input style={{marginLeft: '8px'}}type="text" onChange={this.props.handleSearch}/>
+						</div>
+						<form onChange={this.props.handleFilterSelect}>
+							<ul className="filters">
+								{this.renderFilters()}
+							</ul>
+						</form>
 				</div>
 			</div>
 		)

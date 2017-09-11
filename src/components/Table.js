@@ -44,7 +44,6 @@ export default class Table extends Component {
 		let start = (currentPage - 1) * itemsPerPage;
 		let end = start + itemsPerPage;
 		let rows;
-		console.log(action)
 		if (action === 'sort' || action === 'paginate' || action === 'selectBy') {
 			rows = currentItems;
 		} else if (action === 'search') {
@@ -168,7 +167,6 @@ export default class Table extends Component {
 		})
 	}
 	handleRowSelect = (e, item) => {
-		console.log(item)
 		let val = this.state.selectedItems[item.id] ? false : true; 
 		this.setState({
 			selectedItems: {
@@ -191,7 +189,8 @@ export default class Table extends Component {
 						<tr className="table-header">
 							<th>
 								<input 
-									type="checkbox" 
+									type="checkbox"
+									checked={false}
 								/>
 							</th>
 						  {this.renderTableHeader()}

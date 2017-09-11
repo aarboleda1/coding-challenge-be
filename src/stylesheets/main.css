@@ -22,7 +22,6 @@ table {
 
 td,
 th {
-    border: 1px solid #dddddd;
     text-align: left;
     padding: 6px;
 }
@@ -30,16 +29,18 @@ th {
 th {
     font-weight: 800;
     background: #dddddd;
+    cursor: pointer;
 }
 
 .table-wrapper {
-    max-width: 80%;
+    max-width: 75%;
     margin: auto;
 }
 
 .paginate-list>li {
     display: inline;
     padding: 8px;
+    cursor: pointer;
 }
 
 .paginate-list>.active {
@@ -52,6 +53,7 @@ th {
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
+    align-items: flex-end;
 }
 
 .header-wrapper {
@@ -64,4 +66,12 @@ th {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.filter-title {
+    font-size: .6em;
+}
+
+.search {
+    margin-bottom: 8px;
 }
