@@ -13,9 +13,12 @@ export default class Cell extends Component {
 		}		
 	}
 	render(){
+		const {cellType, val} = this.props;
 		return (
-			<td>
-				{this.props.val}
+			<td
+				data-celltype={cellType}
+			>
+				{val}
 			</td>
 		)
 	}

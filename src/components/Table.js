@@ -10,21 +10,29 @@ export default class Table extends Component {
 			currentPage: 0,
 			search: '',
 			filters: {},
+			allItems: [],
 			items: [],
 			itemsPerPage: 10,
+			sortBy: '',
 		}
 	}
+
+	// const regex = new RegExp(target, 'gi'); 
+	
 	componentDidMount() {
 		fetch(endPoint)
 			.then(res => res.json())
 			.then((data) => {
+				const currentDisplay  = data.slice(0, 15);
 				this.setState({
-					items: [...data],
+					items: [...currentDisplay],
+					allItems: [...data]
 				})
 			})
 	}
-	renderRows = () => {
-		return this.state.items.map((item, idx) => {
+	renderRows = (items) => {
+		const rows = items || this.state.items.slice(0,15);
+		return rows.map((item, idx) => {
 			return (
 				<Row
 					item={item}
@@ -34,12 +42,52 @@ export default class Table extends Component {
 		})
 	}
 
+	renderTableHeader = () => {
+		if (this.state.items[0]) { 
+			const items = this.state.items[0];
+			const headers = Object.keys(items);
+			return headers.map((header, idx) => {
+				return (
+					<th
+						key={idx}
+						onClick={this.sortBy}
+						data-celltype={header}
+					>
+						{header}
+					</th>
+				)
+			})
+		}
+	}
+	sortBy = (e) => {
+		let sortByType = e.target.dataset.celltype
+		let items = this.state.items.sort((a, b) => {
+			if (a[sortByType] > b[sortByType]) 	return 1;
+			
+			if (a[sortByType] < b[sortByType]) return -1;
+			
+			return 0;
+		})
+		this.setState({
+			items: [...items],
+		})
+	}
+
 
 	render() {
 		return (
 			<div className="table-wrapper">
-				<table>
+
+				<table className="table">
 					<tbody>
+						<tr>
+							<th>
+								<input 
+									type="checkbox" 
+								/>
+							</th>
+						  {this.renderTableHeader()}
+						</tr>
 						{this.renderRows()}
 					</tbody>
 				</table>

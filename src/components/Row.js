@@ -19,16 +19,28 @@ export default class Row extends Component {
 				<Cell
 					key={index}
 					val={this.props.item[itemName]}
+					cellType={itemName}
 				/>
 			)
 		}) 
+	}
+	handleInputChange = (e) => {
+		this.setState({
+			isSelected: !this.state.isSelected
+		})
 	}
 	render() {
 		const {item} = this.props;
 		return (
 			<tr>
+				<td>
+					<input 
+						type="checkbox" 
+						checked={this.state.isSelected}
+						onChange={this.handleInputChange}
+					/>
+				</td>
 				{this.renderCells()}
-				{/*<td>{item.email}</td>*/}
 			</tr>
 		)
 	}

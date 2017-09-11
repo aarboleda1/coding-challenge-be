@@ -14,5 +14,15 @@ td,
 th {
     border: 1px solid #dddddd;
     text-align: left;
-    padding: 8px;
+    padding: 6px;
+}
+
+th {
+    font-weight: 800;
+    background: lightgray;
+}
+
+.table-wrapper {
+    max-width: 80%;
+    margin: auto;
 }
