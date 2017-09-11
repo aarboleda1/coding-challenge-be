@@ -23,8 +23,10 @@ export default class Footer extends Component {
 			numList.push(i);
 		}
 		return numList.map((num, idx) => {
+			let isSelected = num === this.props.currentPage ? 'active' : null;
 			return (
-				<li 
+				<li
+					className={isSelected} 
 					onClick={this.props.handlePaginate}
 					role={num}
 					key={idx}
@@ -50,7 +52,9 @@ export default class Footer extends Component {
 				</div>
 				<div className="paginate-wrapper">
 					<ul className="paginate-list">
-						{this.renderPaginateList()}						
+						<li onClick={this.props.handlePaginate} name="next"><a>{'<<'}</a></li>		
+						{this.renderPaginateList()}	
+						<li onClick={this.props.handlePaginate} name="prev"><a>{'>>'}</a></li>					
 					</ul>
 				</div>
 			</div>

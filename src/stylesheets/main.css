@@ -29,7 +29,7 @@ th {
 
 th {
     font-weight: 800;
-    background: lightgray;
+    background: #dddddd;
 }
 
 .table-wrapper {
@@ -42,9 +42,18 @@ th {
     padding: 8px;
 }
 
-.footer {
+.paginate-list>.active {
+    background: #dddddd;
+}
+
+.footer,
+.header {
     display: flex;
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
+}
+
+.header-wrapper {
+    text-align: center;
 }

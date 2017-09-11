@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import Footer from './Footer';
 import PropTypes from 'prop-types';
+
+import Header from './Header';
 import Row from './Row';
+import Footer from './Footer';
 
 const endPoint = 'http://localhost:8080/data';
 export default class Table extends Component {
@@ -16,11 +18,9 @@ export default class Table extends Component {
 			itemsPerPage: 10,
 			sortBy: '',
 			numButtons: 0,
-			action: '',
+			action: '', 
 		}
 	}
-
-	// const regex = new RegExp(target, 'gi'); 
 	
 	componentDidMount() {
 		fetch(endPoint)
@@ -38,12 +38,13 @@ export default class Table extends Component {
 		const {currentPage, itemsPerPage, allItems} = this.state;
 		let start = (currentPage - 1) * itemsPerPage;
 		let end = start + itemsPerPage;
-		// let rows = this.state.items || allItems.slice(start, end);
 		let rows;
 		if (this.state.action === 'sort') {
 			rows = this.state.currentItems
 		}	else if (this.state.action === 'paginate') {
 			rows = allItems.slice(start, end);
+		} else if (this.state.action === 'search') {
+			rows = this.filterAllItems();
 		} else {
 			rows = allItems.slice(start, end);
 		}
@@ -88,8 +89,27 @@ export default class Table extends Component {
 			action: 'sort',
 		})
 	}
+	filterAllItems = () => {
+		const {search} = this.state;
+		const regex = new RegExp(search, 'gi'); 	
+		return this.state.allItems.filter((item) => {
+			return item.id.toString().match(regex) ||
+			       item.first_name.match(regex) ||
+						 item.last_name.match(regex) ||
+						 item['Animal Name'].match(regex) || 
+						 item['IP Address'].match(regex)
+		}).slice(0, this.state.itemsPerPage)
+	}
 	handlePaginate = (e) => {
-		let page = parseInt(e.target.outerText);
+		let page
+		
+		if (e.target.innerText === '>>') {
+			page = this.state.currentPage + 1;
+		} else if (e.target.innerText === '<<') {
+			page = this.state.currentPage - 1 < 1 ? 1 : page;		
+		} else {
+			page = parseInt(e.target.outerText);
+		}
 		this.setState({
 			currentPage: page,
 			action: 'paginate',
@@ -103,10 +123,19 @@ export default class Table extends Component {
 			currentItems: newItems,
 		})
 	}
+	handleSearch = (e) => {
+		this.setState({
+			search: e.target.value,
+			action: 'search',
+		})
+	}
 
 	render() {
 		return (
 			<div className="table-wrapper">
+				<Header
+					handleSearch={this.handleSearch}
+				/>
 				<table className="table">
 					<tbody>
 						<tr className="table-header">
