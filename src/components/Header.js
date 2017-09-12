@@ -24,7 +24,7 @@ export default class Header extends Component {
 	render() {
 		return(
 			<div className="header-wrapper">
-				{/*<div>React Datatable</div>	*/}
+				<div style={{fontSize: '20px'}}>React Datatable</div>
 					<div className="header">
 						<div className="search">
 							<span>Search</span>

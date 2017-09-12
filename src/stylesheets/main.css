@@ -8,6 +8,10 @@ html {
     box-sizing: inherit;
 }
 
+.main-container {
+    margin-top: 20px;
+}
+
 html,
 body,
 #root {
